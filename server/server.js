@@ -6,12 +6,15 @@ configDotenv();
 import dbConnect from "./config/dbConnect.js";
 import userRoutes from "./routes/userRoutes.js";
 import userLoginRouter from "./routes/loginUser.js"; // Adjust the path as necessary
+import userRegesterRoute from './routes/regesterUser.js'
 import mongoose from "mongoose";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 const port = process.env.PORT;
 
@@ -25,3 +28,5 @@ app.get("/", (req, res) => {
 
 app.use("/user", userRoutes);
 app.use("/login", userLoginRouter);
+app.use("/regester", userRegesterRoute);
+
