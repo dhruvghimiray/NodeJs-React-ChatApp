@@ -1,8 +1,14 @@
 import "./App.css";
+import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom"; //npm i react-router-dom --save
 
 import Login from "./components/Login.jsx";
 import RegesterUser from "./components/RegesterUser.jsx";
+import Home from "./components/Home.jsx";
+import withAuth from "./components/HOC/AuthRoute.jsx";
+
+const Protedtedhome = withAuth(Home);
+
 
 const App = () => {
   return (
@@ -11,7 +17,8 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/Register" element={<RegesterUser />} />
+            <Route path="/register" element={<RegesterUser />} />
+            <Route path="/home" element={<Protedtedhome />} />
           </Routes>
         </BrowserRouter>
       </div>

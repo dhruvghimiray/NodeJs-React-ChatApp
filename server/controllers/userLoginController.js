@@ -1,5 +1,8 @@
 import userSchema from "../models/userSchema.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const SECRET_KEY = process.env.JWT_KEY;
 
 export default async (req, res) => {
   if (!req.body) {
@@ -21,7 +24,16 @@ export default async (req, res) => {
 
     // At this point, the user is authenticated
     // Here you might generate a token and send it to the client
-    res.json({ message: "User login successful", user });
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      SECRET_KEY,
+      {
+        expiresIn: "1h", // Token expiration time
+      }
+    );
+
+    // Send the token along with user information
+    res.json({ message: "User login successful", token, user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");

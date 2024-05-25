@@ -1,9 +1,10 @@
 import express from "express";
+import {getUser} from '../controllers/userController.js'
+import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.send("Data from bacend")
-});
+router.get("/",authMiddleware, getUser);
+
 
 export default router;

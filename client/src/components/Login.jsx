@@ -1,14 +1,18 @@
+import "../App.css";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
-import "../App.css";
-
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [cookies, setCookie] = useCookies(["token"]);
+
+  const navigate = useNavigate();
 
   const loginUser = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
@@ -21,7 +25,7 @@ const Login = () => {
       if (response.data.message === "User login successful") {
         toast.success("User Logged In Successfully", {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -29,6 +33,11 @@ const Login = () => {
           progress: undefined,
           theme: "dark",
         });
+
+        setCookie("token", response.data.token);
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);
       }
     } catch (error) {
       if (error.response.status === 401 || error.response.status === 404) {
@@ -51,7 +60,7 @@ const Login = () => {
     <div className="flex justify-center items-center flex-col">
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
