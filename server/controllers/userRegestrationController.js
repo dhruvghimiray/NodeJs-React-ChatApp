@@ -15,7 +15,7 @@ export default async (req, res) => {
 
     if (existingUser) {
       return res
-        .status(400)
+        .status(409)
         .json({ error: "Username or email already in use" });
     }
 

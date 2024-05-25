@@ -28,5 +28,5 @@ app.get("/", (req, res) => {
 
 app.use("/user", userRoutes);
 app.use("/login", userLoginRouter);
-app.use("/regester", userRegesterRoute);
+app.use("/register", userRegesterRoute);
 

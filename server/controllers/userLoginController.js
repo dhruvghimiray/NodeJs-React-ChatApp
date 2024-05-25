@@ -10,18 +10,18 @@ export default async (req, res) => {
   try {
     const user = await userSchema.findOne({ username });
     if (!user) {
-      res.status(404).send("User not found");
+      res.status(404).json({ message: "User not found" });
       return;
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      res.status(401).send("Invalid password");
+      res.status(401).send({ message: "Invalid password" });
       return;
     }
 
     // At this point, the user is authenticated
     // Here you might generate a token and send it to the client
-    res.send(user);
+    res.json({ message: "User login successful", user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
