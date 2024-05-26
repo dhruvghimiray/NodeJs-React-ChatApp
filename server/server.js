@@ -8,6 +8,7 @@ import userRoutes from "./routes/userRoutes.js";
 import userLoginRouter from "./routes/loginUser.js"; // Adjust the path as necessary
 import userRegesterRoute from './routes/regesterUser.js'
 import mongoose from "mongoose";
+import { getUsers } from "./controllers/usersController.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoutes);
+app.use("/users", getUsers);
 app.use("/login", userLoginRouter);
 app.use("/register", userRegesterRoute);
 
