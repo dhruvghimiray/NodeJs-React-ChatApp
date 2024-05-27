@@ -7,10 +7,11 @@ import RegesterUser from "./components/RegesterUser.jsx";
 import Home from "./components/Home.jsx";
 import withAuth from "./components/HOC/AuthRoute.jsx";
 import loginAuth from "./components/HOC/LoggedInAuth.jsx";
+import UserProfile from "./components/UserProfile/UserProfile.jsx";
 
 const Protedtedhome = withAuth(Home);
-const LoginRoute = loginAuth(Login)
-
+const LoginRoute = loginAuth(Login);
+const ProtedtedProfile = withAuth(UserProfile);
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/" element={<LoginRoute />} />
             <Route path="/register" element={<RegesterUser />} />
             <Route path="/home" element={<Protedtedhome />} />
+            <Route path="/user/:id" element={<ProtedtedProfile />} />
           </Routes>
         </BrowserRouter>
       </div>

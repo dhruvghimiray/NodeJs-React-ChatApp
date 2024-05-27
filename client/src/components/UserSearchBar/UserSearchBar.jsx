@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import debounce from "lodash.debounce";
-import {useCookies} from "react-cookie"
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 const UserSearchBar = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -10,6 +11,7 @@ const UserSearchBar = () => {
   const [users, setUsers] = useState([]);
   const [cookies] = useCookies(["token"]); // Retrieve the token from cookies
 
+  const navigate = useNavigate();
 
   // Debounced API call to avoid sending request on every keystroke
   const fetchData = useCallback(
@@ -74,14 +76,16 @@ const UserSearchBar = () => {
             {users.map((user) => (
               <li
                 key={user._id}
-                className="text-white py-2 border-b border-gray-600 last:border-b-0"
+                className="text-white py-2 border-b border-gray-600 last:border-b-0 cursor-pointer"
+                onClick={() => navigate(`/user/${user._id}`)} // Navigate to user profile page
               >
                 {user.username}
               </li>
             ))}
           </ul>
         ) : (
-          !loading && searchValue && <div className="text-white">No users found</div>
+          !loading &&
+          searchValue && <div className="text-white">No users found</div>
         )}
       </div>
     </div>
