@@ -34,9 +34,17 @@ const Home = () => {
   }
 
   return (
-    <div className="text-white w-full h-full ">
-      <div className="flex flex-row justify-between ">
-        <h1 className="max-w-fit  text-lg">Welcome, {user.username}!</h1>
+    <div className="text-white w-full h-full p-4 ">
+      <div className="flex flex-row justify-between mb-6 ">
+        <div className="flex justify-center items-center ">
+          <img
+            src={`https://ui-avatars.com/api/?name=${user.username}`}
+            alt="User avatar"
+            className="w-10 h-10 rounded-full mr-4"
+          />
+
+          <h1 className="max-w-fit  text-lg">Welcome, {user.username}!</h1>
+        </div>
         <button
           className="px-5 bg-red-500 rounded-lg max-w-fit h-10 text-md"
           onClick={logout}
@@ -45,7 +53,7 @@ const Home = () => {
         </button>
       </div>
 
-      <UserSearchBar/>
+      <UserSearchBar />
     </div>
   );
 };

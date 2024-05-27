@@ -47,6 +47,7 @@ const UserSearchBar = () => {
 
   return (
     <div className="w-full">
+      {/* <div>Search for users to Add Friend</div> */}
       <div className="w-full h-12 rounded-xl bg-zinc-600 flex flex-row items-center px-2 mt-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
