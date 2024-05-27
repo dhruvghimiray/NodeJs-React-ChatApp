@@ -8,7 +8,7 @@ import userRoutes from "./routes/userRoutes.js";
 import userLoginRouter from "./routes/loginUser.js"; // Adjust the path as necessary
 import userRegesterRoute from './routes/regesterUser.js'
 import mongoose from "mongoose";
-import { getUsers } from "./controllers/usersController.js";
+import getUsers from "./routes/usersRoute.js";
 
 const app = express();
 

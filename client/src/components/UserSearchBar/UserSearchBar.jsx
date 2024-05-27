@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import debounce from "lodash.debounce";
+import {useCookies} from "react-cookie"
 
 const UserSearchBar = () => {
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
+  const [cookies] = useCookies(["token"]); // Retrieve the token from cookies
+
 
   // Debounced API call to avoid sending request on every keystroke
   const fetchData = useCallback(
@@ -16,6 +19,9 @@ const UserSearchBar = () => {
       try {
         const response = await axios.get("http://localhost:8000/users", {
           params: { query: value },
+          headers: {
+            Authorization: `Bearer ${cookies.token}`, // Include the token in the headers
+          },
         });
         setUsers(response.data);
       } catch (err) {
@@ -25,7 +31,7 @@ const UserSearchBar = () => {
         setLoading(false);
       }
     }, 300),
-    []
+    [cookies.token] // Add cookies.token as a dependency
   );
 
   useEffect(() => {
