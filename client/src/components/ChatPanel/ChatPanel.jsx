@@ -1,8 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const ChatPanel = ({ selectedFriend }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [cookies] = useCookies(["token"]);
+  const [conversationExists, setConversationExists] = useState(false);
+
+  useEffect(() => {
+    const fetchConversation = async () => {
+      if (selectedFriend) {
+        try {
+          const response = await axios.get(`http://localhost:8000/conversations`, {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          });
+
+          const conversation = response.data.conversations.find(convo =>
+            convo.members.some(member => member._id === selectedFriend._id)
+          );
+
+          if (conversation) {
+            setMessages(conversation.messages || []);
+            setConversationExists(true);
+          } else {
+            setMessages([]);
+            setConversationExists(false);
+          }
+        } catch (error) {
+          console.error("Error fetching conversation:", error);
+        }
+      }
+    };
+
+    fetchConversation();
+  }, [selectedFriend, cookies.token]);
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
@@ -25,19 +59,23 @@ const ChatPanel = ({ selectedFriend }) => {
           </div>
 
           <div className="flex-grow overflow-y-auto bg-zinc-800 p-4 rounded-lg">
-            {messages.length > 0 ? (
-              messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`mb-2 p-2 rounded-lg ${
-                    msg.sender === "me" ? "bg-blue-500 self-end" : "bg-gray-500 self-start"
-                  }`}
-                >
-                  <p className="text-white">{msg.text}</p>
-                </div>
-              ))
+            {conversationExists ? (
+              messages.length > 0 ? (
+                messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`mb-2 p-2 rounded-lg ${
+                      msg.sender === "me" ? "bg-blue-500 self-end" : "bg-gray-500 self-start"
+                    }`}
+                  >
+                    <p className="text-white">{msg.text}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-white text-center">No messages yet. Start the conversation!</p>
+              )
             ) : (
-              <p className="text-white text-center">No messages yet. Start the conversation!</p>
+              <p className="text-white text-center">Write a message to start a conversation.</p>
             )}
           </div>
 

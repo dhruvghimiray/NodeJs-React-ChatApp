@@ -1,13 +1,13 @@
 import { text } from "express";
 import mongoose from "mongoose";
 
-const conversationSchema = new mongoose.Schema({
-  conversationId: [
+const messageSchema = new mongoose.Schema({
+  conversationId: 
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Conversation",
     },
-  ],
+  
   senderId: {
     type: mongoose.Schema.Types.ObjectId,
   },
@@ -20,6 +20,6 @@ const conversationSchema = new mongoose.Schema({
   },
 });
 
-const Conversation = mongoose.model("Conversation", conversationSchema);
+const Message = mongoose.model("Message", messageSchema);
 
-export default Conversation;
+export default Message;
