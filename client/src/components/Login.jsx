@@ -70,11 +70,11 @@ const Login = () => {
         pauseOnHover
         theme="dark"
       />
-      <div className="text-white text-center text-3xl pt-40">
+      <div className="text-white text-center text-3xl">
         Welcome to the Chat App
       </div>
 
-      <div className="text-white text-center bg-zinc-700 h-80 w-72 mt-12 rounded-xl p-4">
+      <div className="text-white text-center bg-zinc-700 h-fit w-72 mt-12 rounded-xl p-4">
         <div>Please Sign In/Sign Up to continue</div>
         <form
           className="w-full h-fit flex flex-col justify-center items-center my-6"
@@ -109,7 +109,7 @@ const Login = () => {
 
           <button // Change this to a button
             type="submit"
-            className="bg-blue-500 px-4 py-2 rounded-md w-fit h-fit hover:cursor-pointer mt-4"
+            className="bg-blue-500 px-4 py-2 rounded-md w-fit h-fit hover:cursor-pointer mt-6"
           >
             Login
           </button>
@@ -118,7 +118,7 @@ const Login = () => {
           Not a user?
           <Link to={`/register`}>
             {" "}
-            <span className="hover:cursor-pointer">Sign In</span>
+            <span className="hover:cursor-pointer">Sign Up</span>
           </Link>
         </div>
       </div>

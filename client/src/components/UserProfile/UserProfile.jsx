@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserProfile = () => {
   const { id } = useParams();
@@ -9,6 +11,47 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [cookies] = useCookies(["token"]);
+
+  const addFriend = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/user/addFriend/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+      if (response.data.message === "Friend added successfully") {
+        toast.success("Friend Added Successfully", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
+        setUser((prevUser) => ({ ...prevUser, friends: true }));
+      }
+    } catch (err) {
+      toast.error("Error adding friend", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+      console.error("Error adding friend", err);
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -46,6 +89,18 @@ const UserProfile = () => {
 
   return (
     <div className="text-white p-4 max-w-lg mx-auto bg-zinc-800 rounded-lg shadow-lg">
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="flex items-center space-x-4 mb-4">
         <img
           src={`https://ui-avatars.com/api/?name=${user.name}`}
@@ -76,12 +131,13 @@ const UserProfile = () => {
         ) : (
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-full"
-            onClick={() => console.log("add friend")}
+            onClick={addFriend}
           >
             Add Friend
           </button>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

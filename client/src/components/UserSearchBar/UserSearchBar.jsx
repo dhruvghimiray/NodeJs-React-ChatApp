@@ -46,9 +46,9 @@ const UserSearchBar = () => {
   }, [searchValue, fetchData]);
 
   return (
-    <div className="w-full">
-      {/* <div>Search for users to Add Friend</div> */}
-      <div className="w-full h-12 rounded-xl bg-zinc-600 flex flex-row items-center px-2 mt-2">
+    <div className="w-full flex flex-col items-center relative my-6">
+      {/* Search Bar */}
+      <div className="w-full h-12 rounded-xl bg-zinc-600 flex flex-row items-center px-2 relative">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -71,9 +71,11 @@ const UserSearchBar = () => {
         {loading && <div className="ml-2 text-white">Loading...</div>}
         {error && <div className="ml-2 text-red-500">{error}</div>}
       </div>
-      <div className="mt-4">
+
+      {/* Search Results Container */}
+      <div className="absolute top-full left-0 w-full  z-10 mt-2">
         {users.length > 0 ? (
-          <ul className="bg-zinc-700 rounded-lg p-4">
+          <ul className="backdrop-blur-xl bg-white/20 opacity-95 rounded-lg p-4">
             {users.map((user) => (
               <li
                 key={user._id}
@@ -86,7 +88,11 @@ const UserSearchBar = () => {
           </ul>
         ) : (
           !loading &&
-          searchValue && <div className="text-white">No users found</div>
+          searchValue && (
+            <div className="text-white backdrop-blur-xl bg-white/20 opacity-95 rounded-lg p-4 mt-2">
+              No users found
+            </div>
+          )
         )}
       </div>
     </div>

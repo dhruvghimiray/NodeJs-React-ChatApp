@@ -83,11 +83,11 @@ const RegesterUser = () => {
         pauseOnHover
         theme="dark"
       />
-      <div className="text-white text-center text-3xl pt-40">
+      <div className="text-white text-center text-3xl ">
         Welcome to the Chat App
       </div>
 
-      <div className="text-white text-center bg-zinc-700 h-fit w-72 mt-12 rounded-xl p-4">
+      <div className="text-white text-center bg-zinc-700 h-fit w-fit px-12 mt-12 rounded-xl p-4">
         <div>Regester User</div>
         <form
           className="w-full flex flex-col justify-center items-center my-6"
