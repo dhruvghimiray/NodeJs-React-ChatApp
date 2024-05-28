@@ -7,25 +7,31 @@ const ChatPanel = ({ selectedFriend }) => {
   const [newMessage, setNewMessage] = useState("");
   const [cookies] = useCookies(["token"]);
   const [conversationExists, setConversationExists] = useState(false);
+  const [conversationId, setConversationId] = useState(null);
 
   useEffect(() => {
     const fetchConversation = async () => {
       if (selectedFriend) {
         try {
-          const response = await axios.get(`http://localhost:8000/conversations`, {
-            headers: {
-              Authorization: `Bearer ${cookies.token}`,
-            },
-          });
+          const response = await axios.get(
+            `http://localhost:8000/conversations`,
+            {
+              headers: {
+                Authorization: `Bearer ${cookies.token}`,
+              },
+            }
+          );
 
-          const conversation = response.data.conversations.find(convo =>
-            convo.members.some(member => member._id === selectedFriend._id)
+          const conversation = response.data.conversations.find((convo) =>
+            convo.members.some((member) => member._id === selectedFriend._id)
           );
 
           if (conversation) {
+            setConversationId(conversation._id);
             setMessages(conversation.messages || []);
             setConversationExists(true);
           } else {
+            setConversationId(null);
             setMessages([]);
             setConversationExists(false);
           }
@@ -38,12 +44,54 @@ const ChatPanel = ({ selectedFriend }) => {
     fetchConversation();
   }, [selectedFriend, cookies.token]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage.trim()) {
-      setMessages([...messages, { text: newMessage, sender: "me" }]);
-      setNewMessage("");
+      try {
+        // Send message to backend
+        await axios.post(
+          `http://localhost:8000/messages`,
+          {
+            receiverId: selectedFriend._id,
+            text: newMessage,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        );
+
+        // Update local state with the new message
+        setMessages([...messages, { text: newMessage, senderId: "me" }]);
+        setNewMessage("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
     }
   };
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (conversationId) {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/messages/${conversationId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${cookies.token}`,
+              },
+            }
+          );
+
+          setMessages(response.data.messages || []);
+        } catch (error) {
+          console.error("Error fetching messages:", error);
+        }
+      }
+    };
+
+    fetchMessages();
+  }, [conversationId, cookies.token]);
 
   return (
     <div className="flex flex-col w-full h-full bg-zinc-700 rounded-lg p-4 ml-2">
@@ -65,17 +113,23 @@ const ChatPanel = ({ selectedFriend }) => {
                   <div
                     key={index}
                     className={`mb-2 p-2 rounded-lg ${
-                      msg.sender === "me" ? "bg-blue-500 self-end" : "bg-gray-500 self-start"
+                      msg.senderId !== selectedFriend._id
+                        ? "bg-blue-500 self-end"
+                        : "bg-gray-500 self-start"
                     }`}
                   >
                     <p className="text-white">{msg.text}</p>
                   </div>
                 ))
               ) : (
-                <p className="text-white text-center">No messages yet. Start the conversation!</p>
+                <p className="text-white text-center">
+                  No messages yet. Start the conversation!
+                </p>
               )
             ) : (
-              <p className="text-white text-center">Write a message to start a conversation.</p>
+              <p className="text-white text-center">
+                Write a message to start a conversation.
+              </p>
             )}
           </div>
 
@@ -96,7 +150,9 @@ const ChatPanel = ({ selectedFriend }) => {
           </div>
         </div>
       ) : (
-        <p className="text-white text-center">Please select a friend to start messaging.</p>
+        <p className="text-white text-center">
+          Please select a friend to start messaging.
+        </p>
       )}
     </div>
   );
