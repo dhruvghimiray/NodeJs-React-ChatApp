@@ -41,10 +41,14 @@ const Home = () => {
           },
         });
 
-        newSocket.emit('userConnected', userData._id);
+        newSocket.emit("userConnected", userData._id);
 
         newSocket.on("currentOnlineUsers", (users) => {
-          setOnlineUsers(users);
+          const updatedUsers = Object.keys(users).reduce((acc, userId) => {
+            acc[userId] = "online";
+            return acc;
+          }, {});
+          setOnlineUsers(updatedUsers);
         });
 
         newSocket.on("updateUserStatus", ({ userId, status }) => {

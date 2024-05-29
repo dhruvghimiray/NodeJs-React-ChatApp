@@ -53,7 +53,7 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("A user connected");
+  // console.log("A user connected");
 
   socket.on("joinConversation", (conversationId) => {
     socket.join(conversationId);
@@ -66,10 +66,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("A user disconnected");
+    // console.log("A user disconnected");
   });
 });
-
 
 let onlineUsers = {}; // Key: userId, Value: socketId
 
