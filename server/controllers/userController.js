@@ -1,5 +1,5 @@
 import User from "../models/userSchema.js"; // Adjust the path to your User model as necessary
-
+import Conversation from "../models/conversationSchema.js";
 export const getUser = (req, res) => {
   res.json({
     _id: req.user._id,
@@ -42,9 +42,6 @@ export const addFriend = async (req, res) => {
   const userId = req.user._id;
   const friendId = req.params.id;
 
-  console.log("User ID:", userId);
-  console.log("Friend ID:", friendId);
-
   try {
     const user = await userModel.findById(userId);
     const friend = await userModel.findById(friendId);
@@ -53,22 +50,23 @@ export const addFriend = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if the friend is already in the user's friend list
-    if (user.friends.includes(friendId)) {
-      return res.status(400).json({ message: "User is already your friend" });
+    if (user.friends.includes(friendId) || friend.friends.includes(userId)) {
+      return res
+        .status(400)
+        .json({ message: "You are already friends with this user" });
     }
 
-    // Check if the user is already in the friend's friend list
-    if (friend.friends.includes(userId)) {
-      return res.status(400).json({ message: "You are already friends with this user" });
-    }
-
-    // Add friend to the user's friend list and vice versa
     user.friends.push(friendId);
     friend.friends.push(userId);
 
     await user.save();
     await friend.save();
+
+    // Create a new conversation
+    const newConversation = new Conversation({
+      members: [userId, friendId],
+    });
+    await newConversation.save();
 
     res.status(200).json({ message: "Friend added successfully" });
   } catch (error) {
@@ -81,7 +79,9 @@ export const getFriends = async (req, res) => {
   const userId = req.params.id;
 
   try {
-    const user = await userModel.findById(userId).populate("friends", "username _id");
+    const user = await userModel
+      .findById(userId)
+      .populate("friends", "username _id");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
