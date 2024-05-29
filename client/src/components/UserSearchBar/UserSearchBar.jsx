@@ -46,7 +46,7 @@ const UserSearchBar = () => {
   }, [searchValue, fetchData]);
 
   return (
-    <div className="w-full flex flex-col items-center relative my-6">
+    <div className="w-full h-24 flex flex-col items-center justify-center relative my-2">
       {/* Search Bar */}
       <div className="w-full h-12 rounded-xl bg-zinc-600 flex flex-row items-center px-2 relative">
         <svg

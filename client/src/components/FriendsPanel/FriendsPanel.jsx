@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const FriendsPanel = ({ user, onSelectFriend }) => {
+const FriendsPanel = ({ user, onSelectFriend, onlineUsers }) => {
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -69,7 +69,18 @@ const FriendsPanel = ({ user, onSelectFriend }) => {
                 alt="Friend avatar"
                 className="w-10 h-10 rounded-full mr-3"
               />
-              <span className="text-white">{friend.username}</span>
+              <div className="flex flex-col">
+                <span className="text-white">{friend.username}</span>
+                <span
+                  className={`text-sm ${
+                    onlineUsers[friend._id] === "online"
+                      ? "text-green-500"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {onlineUsers[friend._id] === "online" ? "Online" : "Offline"}
+                </span>
+              </div>
             </li>
           ))}
         </ul>
