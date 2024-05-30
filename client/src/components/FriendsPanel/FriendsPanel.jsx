@@ -10,11 +10,14 @@ const FriendsPanel = ({ user, onSelectFriend, onlineUsers }) => {
   const [error, setError] = useState(null);
   const [cookies] = useCookies(["token"]);
 
+  const baseUrl = process.env.REACT_APP_HOSTED_BASE_URL;
+
+
   useEffect(() => {
     const fetchFriends = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/user/${user._id}/friends`,
+          `${baseUrl}/user/${user._id}/friends`,
           {
             headers: {
               Authorization: `Bearer ${cookies.token}`,

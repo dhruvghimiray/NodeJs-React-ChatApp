@@ -12,8 +12,10 @@ const ChatPanel = ({ selectedFriend }) => {
   const [socket, setSocket] = useState(null);
   const [userId, setUserId] = useState(null);
 
+  const baseUrl = process.env.REACT_APP_HOSTED_BASE_URL;
+
   useEffect(() => {
-    const socketInstance = io("http://localhost:8000", {
+    const socketInstance = io(`${baseUrl}`, {
       auth: {
         token: cookies.token,
       },
@@ -37,14 +39,11 @@ const ChatPanel = ({ selectedFriend }) => {
     const fetchConversation = async () => {
       if (selectedFriend) {
         try {
-          const response = await axios.get(
-            `http://localhost:8000/conversations`,
-            {
-              headers: {
-                Authorization: `Bearer ${cookies.token}`,
-              },
-            }
-          );
+          const response = await axios.get(`${baseUrl}/conversations`, {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          });
 
           const conversation = response.data.conversations.find((convo) =>
             convo.members.some((member) => member._id === selectedFriend._id)
@@ -88,7 +87,7 @@ const ChatPanel = ({ selectedFriend }) => {
 
       try {
         // Send message to backend
-        await axios.post(`http://localhost:8000/messages`, messageData, {
+        await axios.post(`${baseUrl}/messages`, messageData, {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
           },
@@ -110,7 +109,7 @@ const ChatPanel = ({ selectedFriend }) => {
       if (conversationId) {
         try {
           const response = await axios.get(
-            `http://localhost:8000/messages/${conversationId}`,
+            `${baseUrl}/messages/${conversationId}`,
             {
               headers: {
                 Authorization: `Bearer ${cookies.token}`,

@@ -12,10 +12,13 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [cookies] = useCookies(["token"]);
 
+  const baseUrl = process.env.REACT_APP_HOSTED_BASE_URL;
+
+
   const addFriend = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/user/addFriend/${id}`,
+        `  ${baseUrl}/user/addFriend/${id}`,
         {},
         {
           headers: {

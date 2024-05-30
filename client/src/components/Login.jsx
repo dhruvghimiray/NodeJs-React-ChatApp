@@ -7,17 +7,19 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
 
   const navigate = useNavigate();
-
+  const baseUrl = process.env.REACT_APP_HOSTED_BASE_URL
+  
   const loginUser = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
     try {
-      const response = await axios.post("http://localhost:8000/login", {
+      const response = await axios.post(`${baseUrl}/login`, {
         username,
         password,
       });

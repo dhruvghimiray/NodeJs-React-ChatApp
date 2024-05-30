@@ -12,11 +12,13 @@ const RegesterUser = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const baseUrl = process.env.REACT_APP_HOSTED_BASE_URL
+
 
   const registerUser = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/register", {
+      const response = await axios.post(`${baseUrl}/register`, {
         name,
         username,
         email,

@@ -12,6 +12,7 @@ const UserSearchBar = () => {
   const [cookies] = useCookies(["token"]); // Retrieve the token from cookies
 
   const navigate = useNavigate();
+  const baseUrl = process.env.REACT_APP_HOSTED_BASE_URL;
 
   // Debounced API call to avoid sending request on every keystroke
   const fetchData = useCallback(
@@ -19,7 +20,7 @@ const UserSearchBar = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get("http://localhost:8000/users", {
+        const response = await axios.get(`${baseUrl}/users`, {
           params: { query: value },
           headers: {
             Authorization: `Bearer ${cookies.token}`, // Include the token in the headers
