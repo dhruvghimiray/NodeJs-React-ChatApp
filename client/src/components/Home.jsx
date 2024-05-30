@@ -15,6 +15,9 @@ const Home = () => {
   const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
 
+  const baseUrl = process.env.REACT_APP_HOSTED_BASE_URL
+
+
   const logout = () => {
     removeCookie("token", { path: "/" });
     if (socket) {
@@ -26,7 +29,7 @@ const Home = () => {
     const fetchUserData = async () => {
       const token = cookies.token;
       try {
-        const response = await axios.get("http://localhost:8000/user", {
+        const response = await axios.get(`${baseUrl}/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,7 +38,7 @@ const Home = () => {
         const userData = response.data;
         setUser(userData);
 
-        const newSocket = io("http://localhost:8000", {
+        const newSocket = io(`${baseUrl}`, {
           auth: {
             token: cookies.token,
           },

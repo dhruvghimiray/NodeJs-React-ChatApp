@@ -20,7 +20,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Your client URL
+    origin: ["http://localhost:3000", "https://nodejs-react-chatapp-1.onrender.com"], // Allow both local and deployed client URLs
     methods: ["GET", "POST"],
   },
 });
