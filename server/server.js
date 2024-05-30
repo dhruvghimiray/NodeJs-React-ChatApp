@@ -27,6 +27,7 @@ const io = new Server(server, {
 
 app.use(cors());
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 const port = process.env.PORT;
@@ -52,6 +53,8 @@ io.use((socket, next) => {
   next();
 });
 
+let onlineUsers = {}; // Key: userId, Value: socketId
+
 io.on("connection", (socket) => {
   // console.log("A user connected");
 
@@ -68,12 +71,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     // console.log("A user disconnected");
   });
-});
 
-let onlineUsers = {}; // Key: userId, Value: socketId
-
-io.on("connection", (socket) => {
-  console.log("New client connected");
 
   socket.on("userConnected", (userId) => {
     onlineUsers[userId] = socket.id;
@@ -96,3 +94,4 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
   });
 });
+
